@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "config.h"
+#include "simulation.h"
 
 using namespace std;
 

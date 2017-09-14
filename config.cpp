@@ -6,7 +6,7 @@ using namespace std;
 
 	
 
-	Config::Config ()
+	Config::Config()
 	{
 		string version ;
 		string filePath;
