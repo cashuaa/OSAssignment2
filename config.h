@@ -39,6 +39,10 @@ public:
 	void setMouse( const int) ;
 	void setSpeaker( const int) ;
 
+	void readIn( string ) ;
+	void checkForNewLine( string& ) ;
+
+
 private:
 
 	string version;

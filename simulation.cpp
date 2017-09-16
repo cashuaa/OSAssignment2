@@ -12,10 +12,10 @@ using namespace std;
 
 	Simulation::~Simulation() 
 	{
-		
+
 	}
 
-	void Simulation::readFile( string meta, string config ) 
+	void Simulation::readFile( string config ) 
 	{
-
+		configFile.readIn(config) ;
 	}

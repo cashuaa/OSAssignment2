@@ -11,7 +11,7 @@ class Simulation
 		Simulation() ;
 		~Simulation() ;
 
-		void readFile( string, string ) ;
+		void readFile( string ) ;
 
 		Config configFile ;
 		MetaData meta ;

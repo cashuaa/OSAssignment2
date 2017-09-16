@@ -18,12 +18,19 @@ M - MEMORY USED WITH BLOCK, ALLOCATE
 int main( int argc, char * argv[] )
 {
 
-	ifstream fin ;
-	string newString ;
-	string fileName ;
-	fin.open(argv[1]) ;
-	cout << "opening " << argv[1] << endl;
+	Simulation operatingSystem ;
+	string fileName = "DEFAULT" ;
 
+	if(argc < 2)
+	{
+		throw runtime_error ("Didn't specify configuration file") ;
+	}
+	else
+	{
+		fileName = argv[1] ;
+	}
+
+	operatingSystem.readFile(fileName) ;
 
 /*
 // itterate through until end of config_1
@@ -157,6 +164,5 @@ while(newString != "End")
 	}
 	cout << "\n" ;
 */
-	fin.close() ;
 	return 0 ; 
 }
