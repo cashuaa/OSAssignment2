@@ -17,5 +17,10 @@ using namespace std;
 
 	void Simulation::readFile( string config ) 
 	{
-		configFile.readIn(config) ;
+		configFile.readIn( config ) ;
+		readMetaData( configFile.getFilePath() ) ;
+	}
+	void Simulation::readMetaData ( string metaLocation )
+	{
+		meta.readIn( metaLocation.c_str() ) ;
 	}

@@ -12,6 +12,7 @@ public:
 	Config() ;
 	~Config() ;
 
+//GETTERS//
 
 	string const getVersion() ;
 	string const getFilePath() ;
@@ -25,10 +26,15 @@ public:
 	int const getMemory() ;
 	int const getMouse() ;
 	int const getSpeaker() ;
+	string const getLoggingPath() ;
 
+
+//SETTERS//
+	
 	void setVersion( const string) ;
 	void setFilePath( const string) ;
 	void setlogging( const string) ;
+	void setLoggingPath(const string) ;
 
 	void setProcessor( const int) ;
 	void setMonitor( const int) ;
@@ -42,12 +48,15 @@ public:
 	void readIn( string ) ;
 	void checkForNewLine( string& ) ;
 
+	void callMetaData( string ) ;
+
 
 private:
 
 	string version;
 	string filePath;
 	string logging;
+	string loggingPath;
 
 	int processor ;
 	int monitor ;

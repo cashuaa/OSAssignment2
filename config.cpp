@@ -7,11 +7,12 @@
 using namespace std;
 
 	
+//CONSTRUCTOR / DESTRUCTOR//
 
 	Config::Config()
 	{
 		string version ;
-		string filePath;
+		string filePath = "EMPTY";
 		string logging;
 
 		processor = - 1 ;
@@ -30,6 +31,12 @@ using namespace std;
 
 	}
 
+
+
+
+
+//VERSION//
+
 	string const Config::getVersion() 
 	{
 		return version ;
@@ -40,8 +47,20 @@ using namespace std;
 		cout << "Version set to " << version << endl ;
 	}
 
+
+
+
+
+
+
+//FILE PATH//
+
 	string const Config::getFilePath() 
 	{
+		if(filePath[0] == ' ')
+		{
+			filePath.erase(filePath.begin()) ;
+		}
 		return filePath ;
 	}
 	void Config::setFilePath(const string newFilePath) 
@@ -49,19 +68,40 @@ using namespace std;
 		filePath = newFilePath ;
 		cout << "File path set to " << filePath << endl ;
 	}
-	
+
+
+
+
+
+
+
+//LOGGING//	
+
 	string const Config::getLogging() 
 	{
 		return logging ;
 	}
+	string const Config::getLoggingPath()
+	{
+		return loggingPath ;
+	}
 	void Config::setlogging(const string newLogging) 
 	{
 		logging = newLogging ;
-		cout << "Logging set to " << logging << endl ;
+		cout << "Logging instructions: " << logging << endl ;
+	}
+	void Config::setLoggingPath(const string newLoggingPath)
+	{
+		loggingPath = newLoggingPath ;
+		cout << "Logging path: " << loggingPath << endl;
 	}
 
 
+
+
+
 //PROCESSOR//
+
 	int const Config::getProcessor ()
 	{
 		return processor ;
@@ -73,10 +113,17 @@ using namespace std;
 			throw runtime_error("Invalid processor time.") ;
 		else
 			processor = newProcessor ;
-//		cout << "Processor: " << processor ;
+		cout << "Processor: " << processor << endl ;
 	}
 
+
+
+
+
+
+
 //MONITOR//	
+
 	int const Config::getMonitor () 
 	{
 		return monitor ;
@@ -87,10 +134,16 @@ using namespace std;
 			throw runtime_error("Invalid monitor time.") ;
 		else
 			monitor = newMonitor ;
-		cout << "Monitor: " << monitor ;
+		cout << "Monitor: " << monitor << endl ;
 	}
 
+
+
+
+
+
 //HARD DRIVE//
+
 	int const Config::getHardDrive () 
 	{
 		return hardDrive ;
@@ -101,10 +154,16 @@ using namespace std;
 			throw runtime_error("Invalid hard drive time.") ;
 		else
 			hardDrive = newHardDrive ;
-		cout << "Harddrive: " << hardDrive ;
+		cout << "Harddrive: " << hardDrive << endl ;
 	}
 
+
+
+
+
+
 //PRINTER//
+
 	int const Config::getPrinter () 
 	{
 		return printer ;
@@ -115,10 +174,19 @@ using namespace std;
 			throw runtime_error("Invalid printer time") ;
 		else
 			printer = newPrinter ;
-		cout << "printer: " << printer ;
+		
+		cout << "printer: " << printer << endl ;
 	}
 
+
+
+
+
+
+
+
 //KEYBOARD//
+
 	int const Config::getKeyboard() 
 	{
 		return keyboard ;
@@ -129,10 +197,18 @@ using namespace std;
 			throw runtime_error("Invalid keyboard time") ;
 		else		
 			keyboard = newKeyboard ;
-		cout << "keyboard: " << keyboard ;
+		
+		cout << "keyboard: " << keyboard << endl ;
 	}
 
+
+
+
+
+
+
 //MEMORY//
+
 	int const Config::getMemory() 
 	{
 		return memory ;
@@ -143,9 +219,19 @@ using namespace std;
 			throw runtime_error("Invalid memory time") ;
 		else		
 			memory = newMemory ;
+
+		cout << "memory time: " << memory << endl;
 	}
 
+
+
+
+
+
+
+
 //MOUSE//
+
 	int const Config::getMouse() 
 	{
 		return mouse ;
@@ -156,9 +242,18 @@ using namespace std;
 			throw runtime_error("Invalid mouse time") ;
 		else
 			mouse = newMouse ;
+
+		cout << "mouse time: " << mouse << endl;
 	}
 
+
+
+
+
+
+
 //SPEAKER//
+
 	int const Config::getSpeaker() 
 	{
 		return speaker ;
@@ -169,6 +264,8 @@ using namespace std;
 			throw runtime_error("Invalid speaker time") ;
 		else
 			speaker = newSpeaker ;
+
+		cout << "speaker time: " << speaker << endl;
 	}
 
 
@@ -179,16 +276,21 @@ using namespace std;
 		{
 			stringBuffer.erase(stringBuffer.begin()) ;
 		}
-
 	}
 
+
+
+
+
 //READ IN//
+
 	void Config::readIn( string data ) 
 	{
 		string stringBuffer ;
 		int intBuffer ;
 		ifstream fin ;
 		fin.open(data.c_str()) ;
+
 
 		getline(fin, stringBuffer) ;
 		cout << "Configuration File Data" << endl ;
@@ -202,7 +304,6 @@ using namespace std;
 			getline(fin, stringBuffer, ':') ;
 			if(stringBuffer == "Version/Phase" )
 			{
-				cout << stringBuffer << endl ;
 				getline(fin, stringBuffer) ;
 				setVersion(stringBuffer) ;
 			}
@@ -220,7 +321,6 @@ using namespace std;
 			{
 				fin >> intBuffer ;
 				setProcessor(intBuffer) ;
-				cout << "processor = " << getProcessor() <<  "ms/cycle" << endl ;
 			}
 
 
@@ -228,7 +328,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Monitor display time (msec)" )
 			{
-				cout << stringBuffer << endl ;
 				fin >> intBuffer ;
 				setMonitor(intBuffer) ;		
 			}
@@ -237,7 +336,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;		
 			if(stringBuffer == "Hard drive cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;	
 				fin >> intBuffer ;
 				setHardDrive (intBuffer) ;
 			}
@@ -246,7 +344,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Printer cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;	
 				fin >> intBuffer ;
 				setPrinter(intBuffer) ;
 			}
@@ -255,7 +352,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Keyboard cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;	
 				fin >> intBuffer ;
 				setKeyboard(intBuffer) ;
 			}
@@ -264,7 +360,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Memory cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;
 				fin >> intBuffer ;
 				setMemory(intBuffer) ;
 			}
@@ -273,7 +368,6 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Mouse cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;	
 				fin >> intBuffer ;
 				setMouse(intBuffer) ;
 			}
@@ -282,10 +376,30 @@ using namespace std;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Speaker cycle time (msec)" )
 			{
-				cout << stringBuffer << endl ;	
 				fin >> intBuffer ;
 				setSpeaker(intBuffer) ;
 			}	
+
+			getline(fin, stringBuffer, ':') ;
+			checkForNewLine(stringBuffer )  ;
+			if(stringBuffer == "Log" )
+			{
+				getline(fin, stringBuffer) ;
+				setlogging(stringBuffer) ;
+			}	
+			
+			getline(fin, stringBuffer, ':') ;
+			checkForNewLine(stringBuffer) ;
+			if(stringBuffer == "Log File Path" || stringBuffer == "Monitor" || stringBuffer == "Monitor only")
+			{
+				getline(fin, stringBuffer) ;
+				setLoggingPath(stringBuffer) ;
+			}
+			getline(fin, stringBuffer) ;
+			if(stringBuffer == "End Simulator Configuration File")
+			{
+				cout << "Config file read to completion \nMoving to MetaData file" << endl;
+			}
 
 		}
 
