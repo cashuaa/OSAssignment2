@@ -17,32 +17,6 @@ using namespace std;
 		
 	}
 
-/*
-	void MetaData::operatingSystem(int osValue)
-	{
-		metaQueue.push() ;
-	}
-	void MetaData::programApp(int programValue)
-	{
-
-	}
-	void MetaData::runProcess(int processValue)
-	{
-
-	}
-	void MetaData::inputOperation(int inputValue)
-	{
-
-	}
-	void MetaData::outputOperation(int outputValue)
-	{
-
-	}
-	void MetaData::memoryAlloc(int memoryValue)
-	{
-
-	}
-*/
 
 
 
@@ -112,6 +86,15 @@ using namespace std;
 		{
 
 			getline(fin, stringBuffer, '(') ;
+
+				while(stringBuffer[0] != 'S' || stringBuffer[0] != 'A' 
+					||stringBuffer[0] != 'P' ||stringBuffer[0] != 'I' 
+					||stringBuffer[0] != 'O' || stringBuffer[0] != 'M' )
+				{
+					cout << "stuck on " << stringBuffer << endl;
+					stringBuffer.erase(stringBuffer.begin()) ;
+				}
+
 			checkForNewLine(stringBuffer) ;
 
 			structBuffer.code = stringBuffer[0] ;
@@ -123,7 +106,15 @@ using namespace std;
 
 			metaQueue.push(structBuffer) ;
 
-			getline(fin, stringBuffer, ';') ;
+//			getline(fin, stringBuffer, ';') ;
 		}
 		
+		structBuffer.code = 'S';
+		structBuffer.descriptor = "end";
+		structBuffer.cycles = 0;
+
+		//Push onto Queue
+		metaQueue.push(structBuffer);
+
+		fin.close();
 	}

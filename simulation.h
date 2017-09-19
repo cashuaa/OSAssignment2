@@ -13,6 +13,10 @@ class Simulation
 
 		void readFile( string ) ;
 		void readMetaData ( string ) ;
+		void displayAll() ;
+		void displayConfig( ) ;
+		void displayMeta(  ) ;
+		void calculate() ;
 
 
 		Config configFile ;

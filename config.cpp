@@ -44,7 +44,7 @@ using namespace std;
 	void Config::setVersion(const string newVersion) 
 	{
 		version = newVersion ;
-		cout << "Version set to " << version << endl ;
+		
 	}
 
 
@@ -66,7 +66,7 @@ using namespace std;
 	void Config::setFilePath(const string newFilePath) 
 	{
 		filePath = newFilePath ;
-		cout << "File path set to " << filePath << endl ;
+		
 	}
 
 
@@ -88,12 +88,12 @@ using namespace std;
 	void Config::setlogging(const string newLogging) 
 	{
 		logging = newLogging ;
-		cout << "Logging instructions: " << logging << endl ;
+		
 	}
 	void Config::setLoggingPath(const string newLoggingPath)
 	{
 		loggingPath = newLoggingPath ;
-		cout << "Logging path: " << loggingPath << endl;
+		
 	}
 
 
@@ -113,7 +113,7 @@ using namespace std;
 			throw runtime_error("Invalid processor time.") ;
 		else
 			processor = newProcessor ;
-		cout << "Processor: " << processor << endl ;
+		
 	}
 
 
@@ -134,7 +134,7 @@ using namespace std;
 			throw runtime_error("Invalid monitor time.") ;
 		else
 			monitor = newMonitor ;
-		cout << "Monitor: " << monitor << endl ;
+		
 	}
 
 
@@ -154,7 +154,7 @@ using namespace std;
 			throw runtime_error("Invalid hard drive time.") ;
 		else
 			hardDrive = newHardDrive ;
-		cout << "Harddrive: " << hardDrive << endl ;
+		
 	}
 
 
@@ -175,7 +175,7 @@ using namespace std;
 		else
 			printer = newPrinter ;
 		
-		cout << "printer: " << printer << endl ;
+		
 	}
 
 
@@ -198,7 +198,7 @@ using namespace std;
 		else		
 			keyboard = newKeyboard ;
 		
-		cout << "keyboard: " << keyboard << endl ;
+		
 	}
 
 
@@ -220,7 +220,7 @@ using namespace std;
 		else		
 			memory = newMemory ;
 
-		cout << "memory time: " << memory << endl;
+		
 	}
 
 
@@ -243,7 +243,7 @@ using namespace std;
 		else
 			mouse = newMouse ;
 
-		cout << "mouse time: " << mouse << endl;
+		
 	}
 
 
@@ -265,7 +265,7 @@ using namespace std;
 		else
 			speaker = newSpeaker ;
 
-		cout << "speaker time: " << speaker << endl;
+		
 	}
 
 
@@ -293,9 +293,9 @@ using namespace std;
 
 
 		getline(fin, stringBuffer) ;
-		cout << "Configuration File Data" << endl ;
+		
 
-		cout << stringBuffer << endl ;
+		
 
 		if (stringBuffer != "Start Simulator Configuration File")
 			throw runtime_error ("Incorrect file path") ;
@@ -398,7 +398,7 @@ using namespace std;
 			getline(fin, stringBuffer) ;
 			if(stringBuffer == "End Simulator Configuration File")
 			{
-				cout << "Config file read to completion \nMoving to MetaData file" << endl;
+				
 			}
 
 		}

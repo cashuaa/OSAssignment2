@@ -23,5 +23,7 @@ int main( int argc, char * argv[] )
 
 	operatingSystem.readFile(fileName) ;
 
+	operatingSystem.displayAll() ;
+
 	return 0 ; 
 }
