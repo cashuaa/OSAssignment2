@@ -32,23 +32,12 @@ struct meta
 
 		queue<meta> metaQueue;
 
-/*
-		void operatingSystem(int) ;
-		void programApp(int) ;
-		void runProcess(int) ;
-		void inputOperation(int) ;
-		void outputOperation(int) ;
-		void memoryAlloc(int) ;
-*/
-
 		void checkForNewLine( string& ) ;
 		void readIn(string) ;
 
 
 	private:
 
-//		int dataMember ;
-//		int dataBuffer ;
 
 
 	} ;

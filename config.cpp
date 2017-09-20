@@ -88,12 +88,14 @@ using namespace std;
 	void Config::setlogging(const string newLogging) 
 	{
 		logging = newLogging ;
-		
+		if(logging[0] == ' ')
+			logging.erase(logging.begin()) ;		
 	}
 	void Config::setLoggingPath(const string newLoggingPath)
 	{
 		loggingPath = newLoggingPath ;
-		
+		if(loggingPath[0] == ' ')
+			loggingPath.erase(loggingPath.begin()) ;		
 	}
 
 
@@ -248,10 +250,6 @@ using namespace std;
 
 
 
-
-
-
-
 //SPEAKER//
 
 	int const Config::getSpeaker() 
@@ -279,8 +277,12 @@ using namespace std;
 	}
 
 
+/*
+	void Config::testString( string )
+	{
 
-
+	}
+*/
 
 //READ IN//
 

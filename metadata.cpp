@@ -82,38 +82,52 @@ using namespace std;
 		metaQueue.push(structBuffer) ;
 
 
+
+
+// Since it's impossible to have mulitple break's //
+// for reading in, read everything up to the first ( //
+// and proceeed to delete everything leading up to //
+// to the fist potential idenifier //
+
 		while((structBuffer.code == 'S' || structBuffer.code != 'S') && structBuffer.descriptor != "end")
 		{
 
 			getline(fin, stringBuffer, '(') ;
 
-				while(stringBuffer[0] != 'S' || stringBuffer[0] != 'A' 
-					||stringBuffer[0] != 'P' ||stringBuffer[0] != 'I' 
-					||stringBuffer[0] != 'O' || stringBuffer[0] != 'M' )
-				{
-					cout << "stuck on " << stringBuffer << endl;
-					stringBuffer.erase(stringBuffer.begin()) ;
-				}
+			while(stringBuffer[0] != 'A' && stringBuffer[0] != 'S' 
+				&& stringBuffer[0] != 'P' && stringBuffer[0] != 'I' 
+				&& stringBuffer[0] != 'O' && stringBuffer[0] != 'M' )
+			{
+				stringBuffer.erase(stringBuffer.begin()) ;
+			}
+
+
+
 
 			checkForNewLine(stringBuffer) ;
 
 			structBuffer.code = stringBuffer[0] ;
+
 			getline(fin, stringBuffer, ')') ;
+
 			structBuffer.descriptor = stringBuffer ;
 
 			fin >> intBuffer ;
+
 			structBuffer.cycles = intBuffer ;
 
 			metaQueue.push(structBuffer) ;
 
-//			getline(fin, stringBuffer, ';') ;
+
 		}
-		
+
+// hardcode last struct buffer //
+
 		structBuffer.code = 'S';
 		structBuffer.descriptor = "end";
 		structBuffer.cycles = 0;
 
-		//Push onto Queue
+// Push onto Queue //
 		metaQueue.push(structBuffer);
 
 		fin.close();

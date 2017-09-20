@@ -23,7 +23,15 @@ int main( int argc, char * argv[] )
 
 	operatingSystem.readFile(fileName) ;
 
-	operatingSystem.displayAll() ;
+	if(operatingSystem.configFile.getLogging() == "Log to Both" || operatingSystem.configFile.getLogging() == "Log to file" )
+	{
+//		operatingSystem.displayAll() ;
+		operatingSystem.toFile() ;
+	}
+	else
+	{
+		operatingSystem.displayAll() ;
+	}
 
 	return 0 ; 
 }

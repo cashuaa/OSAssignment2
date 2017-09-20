@@ -18,6 +18,8 @@ class Simulation
 		void displayMeta(  ) ;
 		void calculate() ;
 
+		void toFile() ;
+
 
 		Config configFile ;
 		MetaData meta ;
