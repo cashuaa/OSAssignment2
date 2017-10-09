@@ -47,18 +47,18 @@ using namespace std;
 		O - USED WITH OUTPUT OPERATION DESCRIPTORS SUCH AS HARD DRIVE, MONITOR, SPEAKER
 		M - MEMORY USED WITH BLOCK, ALLOCATE
 		*/
+		
 		int intBuffer ;
 		meta structBuffer ;
 		string stringBuffer ;
 		ifstream fin ;
 
 		fin.open(data.c_str()) ;
-
 		getline(fin, stringBuffer) ;
 
 		if(stringBuffer != "Start Program Meta-Data Code:")
 		{
-			throw runtime_error("Bad file.") ;
+			throw runtime_error("Bad metadeta file.") ;
 		}
 
 

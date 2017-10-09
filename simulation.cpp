@@ -1,20 +1,24 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include "simulation.h"
 
 using namespace std; 
 
 
 
+	void* runner(void *param);
+
+
+
 	Simulation::Simulation() 
 	{
-
 	}
+
 
 	Simulation::~Simulation() 
 	{
-
 	}
 
 
@@ -25,8 +29,6 @@ using namespace std;
 	}
 
 
-
-
 	void Simulation::readMetaData ( string metaLocation )
 	{
 		meta.readIn( metaLocation.c_str() ) ;
@@ -35,159 +37,416 @@ using namespace std;
 
 
 
-
-	void Simulation::displayAll()
+	void Simulation::toFile(bool monitor, bool file)
 	{
-		displayConfig() ;
-		displayMeta() ;
+		std::stringstream stream;
+		string currentTime ;
+		string verbage ;
+		string outputStringForFile ;
+
+
+		int cycleTime ; 
+		int process = 1 ;
+
+
+
+		simulationTimer.timer.start() ;
+		currentTime = simulationTimer.getTime() + " - " ;
+		cout << currentTime << "Simulator program starting" << endl ;
+
+		outputStringForFile = currentTime + "Simulator program starting\n" ;
+
+
+
+		ofstream outStream(configFile.getLoggingPath().c_str());
+
+
+
+		if (configFile.getLogging() == "Log to Monitor")
+		{
+			outStream << "Logged to: monitor" << endl;
+		}
+		else if(configFile.getLogging() == "Log to File")
+		{
+			outStream << "Logged to: " << configFile.getLoggingPath() << endl;
+		}
+		else if (configFile.getLogging() == "Log to Both")
+		{
+			outStream << "Logged to: monitor and " << configFile.getLoggingPath() << endl;
+		}
+		else
+		{
+			outStream << "Logged to: " << configFile.getLogging() << endl;
+		}
+
+
+		if(monitor == true)
+		{
+			for (int i = 0; i < 2; i ++)
+			{
+				currentTime = simulationTimer.getTime() + " - " ;
+				
+
+				cout << currentTime ;
+				outputStringForFile += currentTime ;
+
+
+				if(meta.metaQueue.front().code == 'S')
+				{
+					cout << "OS: preparing process 1" << endl ;
+					outputStringForFile += "OS: preparing process 1\n" ;
+				}
+				else if(meta.metaQueue.front().code == 'A')
+				{
+					cout << "OS: starting process 1" << endl ;
+					outputStringForFile += "OS: starting process 1\n" ;
+				}
+				
+				meta.metaQueue.pop();
+			}
+
+
+
+
+			while(!meta.metaQueue.empty() && meta.metaQueue.front().cycles != 0)
+			{
+				currentTime = simulationTimer.getTime() + " - " ;
+				cout << currentTime << "Process " << process ;
+				outputStringForFile += currentTime ;
+				outputStringForFile += "Process 1" ;
+
+				cycleTime = calculate( meta.metaQueue.front().code, meta.metaQueue.front().descriptor, meta.metaQueue.front().cycles ) ;
+
+
+				if(meta.metaQueue.front().code != 'M')
+				{
+					cout << ": start " ; 
+					outputStringForFile += ": start " ;
+				}
+				if(meta.metaQueue.front().code == 'M')
+				{
+					cout << ": " ;
+					outputStringForFile += ": " ;
+				}
+
+
+				verbage = " empty verbage" ;
+
+				if(meta.metaQueue.front().code == 'P')
+				{
+					verbage = "processing action";
+					cout << verbage << endl ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+				else if(meta.metaQueue.front().code == 'M')
+				{
+
+					if(meta.metaQueue.front().descriptor == "allocate")
+					{
+						verbage = "allocating memory";
+						cout << verbage << endl ;
+						outputStringForFile += verbage ; 
+						outputStringForFile += "\n" ;
+					}
+					else if (meta.metaQueue.front().descriptor == "block")
+					{
+						verbage = "blocking memory";
+						cout << verbage << endl;
+						outputStringForFile += verbage ;
+						outputStringForFile += "\n" ;				
+					}
+				
+				}
+
+
+				else if(meta.metaQueue.front().code == 'O')
+				{
+					verbage = meta.metaQueue.front().descriptor + " output" ;
+					cout << verbage << endl ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;		
+					threadSim(cycleTime);	
+				}
+
+
+				else if(meta.metaQueue.front().code == 'I')
+				{
+
+					verbage = meta.metaQueue.front().descriptor + " input" ;
+					cout << verbage << endl ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+					threadSim(cycleTime);		
+				
+				}		
+				else
+				{
+					cout << verbage << endl ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+
+
+
+				currentTime = simulationTimer.getTime() + " - " ;
+				cout << currentTime << "Process " << process ;
+				outputStringForFile += currentTime ;
+				outputStringForFile += "Process 1" ;
+
+				if(meta.metaQueue.front().code != 'M')
+				{
+					cout << ": end " << verbage << endl ;
+					outputStringForFile += ": end " ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+
+				if(meta.metaQueue.front().code == 'M')
+				{
+					stream << "0x" << hex << allocateMemory(42949296);
+					if(meta.metaQueue.front().descriptor == "allocate")
+					{	
+						cout << ": memory allocated at " << stream.str() << endl;
+						outputStringForFile += ": memory allocated at 0x" ;
+						outputStringForFile += stream.str() ;
+						outputStringForFile += "\n" ;			
+					}
+					else if(meta.metaQueue.front().descriptor == "block")
+					{
+						cout << ": memory blocked" << endl;
+						outputStringForFile += ": memory blocked" ;
+						outputStringForFile += "\n" ;				
+					}
+				}
+				meta.metaQueue.pop();	
+			
+			}
+
+
+			currentTime = simulationTimer.getTime() + " - " ;
+			cout << currentTime << "OS: removing process " << process << endl;
+			outputStringForFile += currentTime ; 
+			outputStringForFile += "OS: removing process " ;
+			outputStringForFile += process ;
+			outputStringForFile += "\n" ;
+
+			
+			currentTime = simulationTimer.getTime() + " - " ;
+			cout << currentTime << "Simulator program ending" << endl;
+			outputStringForFile += currentTime ;
+			outputStringForFile += "Simulator program ending\n" ;
+
+			if (file == true)
+			{
+				outStream << outputStringForFile ;
+			}
+			outStream.close();
+		}
+
+		else if(monitor == false)
+		{
+			for (int i = 0; i < 2; i ++)
+			{
+				currentTime = simulationTimer.getTime() + " - " ;
+				
+				outputStringForFile += currentTime ;
+
+
+				if(meta.metaQueue.front().code == 'S')
+				{
+					outputStringForFile += "OS: preparing process 1\n" ;
+				}
+				else if(meta.metaQueue.front().code == 'A')
+				{
+					outputStringForFile += "OS: starting process 1\n" ;
+				}
+				
+				meta.metaQueue.pop();
+			}
+
+
+
+
+			while(!meta.metaQueue.empty() && meta.metaQueue.front().cycles != 0)
+			{
+				currentTime = simulationTimer.getTime() + " - " ;
+				outputStringForFile += currentTime ;
+				outputStringForFile += "Process 1" ;
+
+				cycleTime = calculate( meta.metaQueue.front().code, meta.metaQueue.front().descriptor, meta.metaQueue.front().cycles ) ;
+
+
+				if(meta.metaQueue.front().code != 'M')
+				{
+					outputStringForFile += ": start " ;
+				}
+				if(meta.metaQueue.front().code == 'M')
+				{
+					outputStringForFile += ": " ;
+				}
+
+
+				verbage = " empty verbage" ;
+
+				if(meta.metaQueue.front().code == 'P')
+				{
+					verbage = "processing action";
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+				else if(meta.metaQueue.front().code == 'M')
+				{
+
+					if(meta.metaQueue.front().descriptor == "allocate")
+					{
+						verbage = "allocating memory";
+						outputStringForFile += verbage ; 
+						outputStringForFile += "\n" ;
+					}
+					else if (meta.metaQueue.front().descriptor == "block")
+					{
+						verbage = "blocking memory";
+						outputStringForFile += verbage ;
+						outputStringForFile += "\n" ;				
+					}
+				
+				}
+
+
+				else if(meta.metaQueue.front().code == 'O')
+				{
+					verbage = meta.metaQueue.front().descriptor + " output" ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;		
+					threadSim(cycleTime);	
+				}
+
+
+				else if(meta.metaQueue.front().code == 'I')
+				{
+
+					verbage = meta.metaQueue.front().descriptor + " input" ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+					threadSim(cycleTime);		
+				
+				}		
+				else
+				{
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+
+
+
+				currentTime = simulationTimer.getTime() + " - " ;
+				outputStringForFile += currentTime ;
+				outputStringForFile += "Process 1" ;
+
+				if(meta.metaQueue.front().code != 'M')
+				{
+					outputStringForFile += ": end " ;
+					outputStringForFile += verbage ;
+					outputStringForFile += "\n" ;
+				}
+
+
+				if(meta.metaQueue.front().code == 'M')
+				{
+					stream << "0x" << hex << allocateMemory(42942496);
+					if(meta.metaQueue.front().descriptor == "allocate")
+					{	
+						outputStringForFile += ": memory allocated at " ;
+						outputStringForFile += stream.str() ;
+						outputStringForFile += "\n" ;			
+					}
+					else if(meta.metaQueue.front().descriptor == "block")
+					{
+						outputStringForFile += ": memory blocked" ;
+						outputStringForFile += "\n" ;				
+					}
+				}
+				meta.metaQueue.pop();	
+			
+			}
+
+
+			currentTime = simulationTimer.getTime() + " - " ;
+			outputStringForFile += currentTime ; 
+			outputStringForFile += "OS: removing process " ;
+			outputStringForFile += process ;
+			outputStringForFile += "\n" ;
+
+			
+			currentTime = simulationTimer.getTime() + " - " ;
+			outputStringForFile += currentTime ;
+			outputStringForFile += "Simulator program ending\n" ;
+
+			if (file == true)
+			{
+				outStream << outputStringForFile ;
+			}
+			outStream.close();
+		}
 
 	}
 
 
-void Simulation::toFile()
-{
-	ofstream outString(configFile.getLoggingPath().c_str());
-
-	displayConfig() ;
-
-	 outString << "Configuration File Data" << endl
-	 << "Processor = " << configFile.getProcessor()  << " ms/cycle" << endl
-	 << "Monitor = " << configFile.getMonitor() << " ms/cycle" << endl
-	 << "Hard Drive = " << configFile.getHardDrive() << " ms/cycle" << endl
-	 << "Printer = " << configFile.getPrinter() << " ms/cycle" << endl
-	 << "Keyboard = " << configFile.getKeyboard() << " ms/cycle" << endl
-	 << "Memory = " << configFile.getMemory() << " ms/cycle" << endl
-	 << "Mouse = " << configFile.getMouse() << " ms/cycle" << endl
-	 << "Speaker = " << configFile.getSpeaker() << " ms/cycle" << endl
-	 << "Logged to: " << configFile.getLogging() << endl << endl ;
-
-
-	if (configFile.getLogging() == "Log to Monitor")
-	{
-		outString << "Logged to: monitor" << endl;
-	}
-	else if(configFile.getLogging() == "Log to File")
-	{
-		outString << "Logged to: " << configFile.getLoggingPath() << endl;
-	}
-	else if (configFile.getLogging() == "Log to Both")
-	{
-		outString << "Logged to: monitor and " << configFile.getLoggingPath() << endl;
-	}
-	else
-	{
-		outString << "Logged to: " << configFile.getLogging() << endl;
-	}
-
-
-	outString << endl << endl;
-	cout << "Meta-Data Metrics" << endl;
-	outString << "Meta-Data Metrics" << endl;
-	for (int i = 0; i < 2; i ++)
-	{
-		meta.metaQueue.pop();
-	}
-
-	while(!meta.metaQueue.empty() && meta.metaQueue.front().cycles != 0)
-	{
-		cout << meta.metaQueue.front().code << '(' << meta.metaQueue.front().descriptor
-		<< ')' << meta.metaQueue.front().cycles << " - ";
-		calculate();
-
-		cout << meta.metaQueue.front().cycles << endl;
-		outString << meta.metaQueue.front().code << '(' << meta.metaQueue.front().descriptor
-		<< ')' << meta.metaQueue.front().cycles << " - " << meta.metaQueue.front().cycles << endl;
-
-		meta.metaQueue.pop();	
-	}
-
-	outString.close();
-}
-
-
-
-
-	void Simulation::displayConfig(  )
+	int Simulation::calculate(char code, string descriptor, int cycles) 
 	{
 
-		cout << "Configuration File Data" << endl;
-		cout << "Processor = " << configFile.getProcessor()  << " ms/cycle" << endl;
-		cout << "Monitor = " << configFile.getMonitor() << " ms/cycle" << endl ;
-		cout << "Hard Drive = " << configFile.getHardDrive() << " ms/cycle" << endl ;
-		cout << "Printer = " << configFile.getPrinter() << " ms/cycle" << endl ;
-		cout << "Keyboard = " << configFile.getKeyboard() << " ms/cycle" << endl ;
-		cout << "Memory = " << configFile.getMemory() << " ms/cycle" << endl ;
-		cout << "Mouse = " << configFile.getMouse() << " ms/cycle" << endl ;
-		cout << "Speaker = " << configFile.getSpeaker() << " ms/cycle" << endl ;
-		cout << "Logged to: " << configFile.getLogging() << endl << endl;
+		if(descriptor == "run")
+		{
+			cycles = (cycles * configFile.getProcessor() ) ;
+		}
+		else if(descriptor == "allocate" || descriptor == "block")
+		{
+			cycles = (cycles * configFile.getMemory () ) ;
+		}
+		else if(descriptor == "monitor")
+		{
+			cycles = (cycles * configFile.getMonitor() ) ;
+		}
+		else if(descriptor == "hard drive")
+		{
+			cycles = (cycles * configFile.getHardDrive() ) ;
+		}
+		else if(descriptor == "printer")
+		{
+			cycles = (cycles * configFile.getPrinter() ) ;
+		}
+		else if(descriptor == "system memory")
+		{
+			cycles = (cycles * configFile.getSystemMemory() ) ;
+		}
+		else if(descriptor == "keyboard")
+		{
+			cycles = (cycles * configFile.getKeyboard() ) ;
+		}
+		return cycles ;
 	}
 
 
-
-
-
-
-
-	void Simulation::displayMeta(  )
+	void Simulation::threadSim (int mSec)
 	{
-
-		cout << "Meta-Data Metrics" << endl;
-		for(int i = 0; i < 2; i++)
-		{
-			meta.metaQueue.pop() ;
-		}
-
-		while(!meta.metaQueue.empty() && meta.metaQueue.front().cycles != 0)
-		{
-
-			cout << meta.metaQueue.front().code << "(" << meta.metaQueue.front().descriptor << ")"
-			<< meta.metaQueue.front().cycles << " - " ;
-			calculate() ;
-
-			cout << meta.metaQueue.front().cycles << " ms" << endl;
-			meta.metaQueue.pop() ;
-		}
-	}
+			simulationTimer.delay = mSec;
+		
+			pthread_t tid;
+			pthread_attr_t attr;
+			pthread_attr_init(&attr);
+			pthread_create(&tid, &attr, runner, &simulationTimer);
+			pthread_join(tid, NULL);
+	}		
 
 
 
 
 
-
-
-
-	void Simulation::calculate()
+		void* runner (void *param)
 	{
-		if(meta.metaQueue.front().descriptor == "run")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getProcessor() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "allocate" || meta.metaQueue.front().descriptor == "block")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getMemory () ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "monitor")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getMonitor() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "hard drive")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getHardDrive() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "mouse")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getMouse() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "printer")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getPrinter() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "speaker")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getSpeaker() ) ;
-		}
-		else if(meta.metaQueue.front().descriptor == "keyboard")
-		{
-			meta.metaQueue.front().cycles = (meta.metaQueue.front().cycles * configFile.getKeyboard() ) ;
-		}
-	}
+			timerClass* runnerTimer = (timerClass*) param;
+		 	runnerTimer->timer.delay(runnerTimer->delay);
+			pthread_exit(0);	
+
+	}	

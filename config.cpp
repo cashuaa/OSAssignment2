@@ -21,8 +21,7 @@ using namespace std;
 		printer = - 1  ;
 		keyboard = - 1 ;
 		memory = - 1 ;
-		mouse = - 1 ;
-		speaker = - 1 ;
+		systemMemory = - 1 ;
 	}
 
 	Config::~Config()
@@ -226,12 +225,6 @@ using namespace std;
 	}
 
 
-
-
-
-
-
-
 //MOUSE//
 
 	int const Config::getMouse() 
@@ -265,6 +258,25 @@ using namespace std;
 
 		
 	}
+
+
+
+//SYSTEM MEMORY//
+
+	int const Config::getSystemMemory() 
+	{
+		return systemMemory ;
+	}
+	void Config::setSystemMemory(const int newSystemMemory) 
+	{
+		if ( newSystemMemory <= 0 )
+			throw runtime_error("Invalid system memory time") ;
+		else
+			systemMemory = newSystemMemory ;
+
+		
+	}
+
 
 
 //NEWLINE//
@@ -368,6 +380,14 @@ using namespace std;
 
 			getline(fin, stringBuffer, ':') ;
 			checkForNewLine(stringBuffer )  ;
+			if(stringBuffer == "System memory (kbytes)" )
+			{
+				fin >> intBuffer ;
+				setSystemMemory(intBuffer) ;
+			}
+/*
+			getline(fin, stringBuffer, ':') ;
+			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Mouse cycle time (msec)" )
 			{
 				fin >> intBuffer ;
@@ -381,7 +401,7 @@ using namespace std;
 				fin >> intBuffer ;
 				setSpeaker(intBuffer) ;
 			}	
-
+*/
 			getline(fin, stringBuffer, ':') ;
 			checkForNewLine(stringBuffer )  ;
 			if(stringBuffer == "Log" )

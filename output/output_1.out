@@ -1,41 +1,34 @@
-Configuration File Data
-Processor = 10 ms/cycle
-Monitor = 25 ms/cycle
-Hard Drive = 50 ms/cycle
-Printer = 500 ms/cycle
-Keyboard = 1000 ms/cycle
-Memory = 35 ms/cycle
-Mouse = 20 ms/cycle
-Speaker = 10 ms/cycle
-Logged to: Log to Both
-
 Logged to: monitor and output/output_1.out
-
-
-Meta-Data Metrics
-M(allocate)420 - 420
-I(keyboard)6000 - 6000
-O(printer)7500 - 7500
-P(run)100 - 100
-I(hard drive)700 - 700
-O(printer)5000 - 5000
-P(run)90 - 90
-P(run)90 - 90
-I(keyboard)5000 - 5000
-P(run)140 - 140
-O(hard drive)450 - 450
-I(keyboard)15000 - 15000
-O(hard drive)250 - 250
-I(hard drive)600 - 600
-O(hard drive)350 - 350
-P(run)80 - 80
-I(hard drive)600 - 600
-O(printer)6000 - 6000
-P(run)110 - 110
-I(keyboard)10000 - 10000
-P(run)100 - 100
-O(printer)7500 - 7500
-I(keyboard)6000 - 6000
-P(run)110 - 110
-P(run)140 - 140
-O(printer)3000 - 3000
+0.000000 - Simulator program starting
+0.000091 - OS: preparing process 1
+0.000100 - OS: starting process 1
+0.000107 - Process 1: start processing action
+0.000125 - Process 1: end processing action
+0.000138 - Process 1: allocating memory
+0.000151 - Process 1: memory allocated at 0x0x19fabbb
+0.000173 - Process 1: start monitor output
+0.210271 - Process 1: end monitor output
+0.210309 - Process 1: start hard drive input
+0.354385 - Process 1: end hard drive input
+0.354413 - Process 1: start printer output
+5.354490 - Process 1: end printer output
+5.354514 - Process 1: start processing action
+5.354520 - Process 1: end processing action
+5.354525 - Process 1: start printer output
+6.354590 - Process 1: end printer output
+6.354615 - Process 1: blocking memory
+6.354621 - Process 1: memory blocked
+6.354641 - Process 1: start keyboard input
+6.439697 - Process 1: end keyboard input
+6.439732 - Process 1: blocking memory
+6.439740 - Process 1: memory blocked
+6.439756 - Process 1: start processing action
+6.439762 - Process 1: end processing action
+6.439767 - Process 1: start processing action
+6.439772 - Process 1: end processing action
+6.439777 - Process 1: start hard drive output
+6.547845 - Process 1: end hard drive output
+6.547872 - Process 1: start processing action
+6.547878 - Process 1: end processing action
+6.547883 - OS: removing process 
+6.547887 - Simulator program ending

@@ -26,6 +26,7 @@ public:
 	int const getMemory() ;
 	int const getMouse() ;
 	int const getSpeaker() ;
+	int const getSystemMemory() ;
 	string const getLoggingPath() ;
 
 
@@ -42,6 +43,7 @@ public:
 	void setPrinter( const int) ;
 	void setKeyboard( const int) ; 
 	void setMemory( const int) ;
+	void setSystemMemory( const int) ;
 	void setMouse( const int) ;
 	void setSpeaker( const int) ;
 
@@ -66,5 +68,7 @@ private:
 	int memory ;
 	int mouse ;
 	int speaker ;
+	int systemMemory ;
+
 
 } ;

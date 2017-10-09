@@ -4,9 +4,28 @@
 
 using namespace std;
 
+/*
+	PCB INILTALIZATION
+*/
+
+struct PCB
+{
+	bool processState ;
+	bool start ;
+	bool ready ;
+	bool running ;
+	bool wait ;
+	bool intExit ;
+};
+
 
 int main( int argc, char * argv[] )
 {
+	PCB buffer ;
+	buffer.processState = true ;
+
+	bool monitor = false ;
+	bool file = false ;
 
 	Simulation operatingSystem ;
 
@@ -18,20 +37,22 @@ int main( int argc, char * argv[] )
 	}
 	else
 	{
-		fileName = argv[1] ;
+			fileName = argv[1] ;
 	}
 
 	operatingSystem.readFile(fileName) ;
 
 	if(operatingSystem.configFile.getLogging() == "Log to Both" || operatingSystem.configFile.getLogging() == "Log to file" )
 	{
-//		operatingSystem.displayAll() ;
-		operatingSystem.toFile() ;
+		file = true ;
 	}
-	else
+	if(operatingSystem.configFile.getLogging() == "Log to Both" || operatingSystem.configFile.getLogging() == "Log to monitor" )
 	{
-		operatingSystem.displayAll() ;
+		monitor = true ;
 	}
+
+	operatingSystem.toFile(monitor, file) ;
+	
 
 	return 0 ; 
 }
