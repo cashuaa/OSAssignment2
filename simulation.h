@@ -6,7 +6,7 @@
 
 
 //Written by Micheal Leverington
-#include "simpletimer.h"
+#include "SimpleTimer.h"
 
 using namespace std;
 
